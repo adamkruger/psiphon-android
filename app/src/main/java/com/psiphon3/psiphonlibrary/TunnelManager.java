@@ -1204,6 +1204,8 @@ public class TunnelManager implements PsiphonTunnel.HostService, MyLog.ILogger, 
 
             json.put("EmitDiagnosticNetworkParameters", true);
 
+            json.put("EmitServerAlerts", true);
+
             // If this is a temporary tunnel (like for UpgradeChecker) we need to override some of
             // the implicit config values.
             if (temporaryTunnel) {
@@ -1571,5 +1573,62 @@ public class TunnelManager implements PsiphonTunnel.HostService, MyLog.ILogger, 
                 MyLog.e(R.string.start_tunnel_failed, MyLog.Sensitivity.NOT_SENSITIVE, e.getMessage());
             }
         });
+    }
+
+    @Override
+    public void onServerAlert(String reason, String subject) {
+        switch (reason) {
+            case "unsafe-traffic":
+                // TODO: log this event
+                m_Handler.post(new Runnable() {
+                   @Override
+                   public void run() {
+                        final Context context = getContext();
+                        String notificationMessage = String.format(context.getString(R.string.unsafe_traffic_alert_notification_message), subject);
+                        Notification notification = new NotificationCompat.Builder(context)
+                                .setSmallIcon(R.drawable.ic_psiphon_alert_notification)
+                                .setContentTitle(context.getString(R.string.unsafe_traffic_alert_notification_title))
+                                .setContentText(notificationMessage)
+                                .setStyle(new NotificationCompat.BigTextStyle().bigText(notificationMessage))
+                                .setPriority(NotificationCompat.PRIORITY_HIGH)
+                                .build();
+
+                        if (mNotificationManager != null) {
+                            mNotificationManager.notify(R.id.notification_id_unsafe_traffic_alert, notification);
+                        }
+                    }
+               });
+
+                break;
+            case "disallowed-traffic":
+                // TODO: log this event?
+                
+                // TODO: don't show this in subscribed/speed boost state
+                m_Handler.post(new Runnable() {
+                   @Override
+                   public void run() {
+                        final Context context = getContext();
+                        String notificationMessage = context.getString(R.string.disallowed_traffic_alert_notification_message);
+                        Notification notification = new NotificationCompat.Builder(context)
+                                .setSmallIcon(R.drawable.ic_psiphon_alert_notification)
+                                .setContentTitle(context.getString(R.string.disallowed_traffic_alert_notification_title))
+                                .setContentText(notificationMessage)
+                                .setStyle(new NotificationCompat.BigTextStyle().bigText(notificationMessage))
+                                .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+                                .setContentIntent(getPendingIntent(m_parentService, INTENT_ACTION_VIEW))
+                                .build();
+
+                        if (mNotificationManager != null) {
+                            mNotificationManager.notify(R.id.notification_id_disallowed_traffic_alert, notification);
+                        }
+                    }
+                });
+
+                break;
+            default:
+                // TODO: log this as an unexpected event
+
+                break;
+        }
     }
 }

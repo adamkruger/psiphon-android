@@ -232,4 +232,16 @@
 
     <!-- Auto dismissable alert message informing users that subscription options are not available at the moment -->
     <string name="subscription_options_currently_not_available">Subscription options are currently not available, please try again later.</string>
+
+    <!-- TODO -->
+    <string name="unsafe_traffic_alert_notification_title">Alert: Psiphon has blocked malware</string>
+
+    <!-- TODO -->
+    <string name="unsafe_traffic_alert_notification_message">Psiphon has detected and blocked potentially malicious traffic on your device. Malware name: %s.</string>
+
+    <!-- TODO -->
+    <string name="disallowed_traffic_alert_notification_title">Upgrade Psiphon Pro</string>
+
+    <!-- TODO -->
+    <string name="disallowed_traffic_alert_notification_message">Some Internet traffic is not supported by the free version of Psiphon Pro. Purchase a subscription or Speed Boost to unlock the full potential of your Psiphon experience.</string>
 </resources>

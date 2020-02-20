@@ -4,4 +4,6 @@
     <item name="notification_id_open_app_to_keep_connecting" type="id"></item>
     <item name="notification_id_region_not_available" type="id"></item>
     <item name="notification_id_vpn_revoked" type="id"></item>
+    <item name="notification_id_unsafe_traffic_alert" type="id"></item>
+    <item name="notification_id_disallowed_traffic_alert" type="id"></item>
 </resources>
