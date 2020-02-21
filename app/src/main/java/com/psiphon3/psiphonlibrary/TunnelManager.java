@@ -111,6 +111,8 @@ public class TunnelManager implements PsiphonTunnel.HostService, MyLog.ILogger, 
     }
 
     public static final String INTENT_ACTION_VIEW = "ACTION_VIEW";
+    public static final String INTENT_ACTION_DISALLOWED_TRAFFIC = "com.psiphon3.psiphonlibrary.TunnelManager.DISALLOWED_TRAFFIC";
+    public static final String INTENT_ACTION_UNSAFE_TRAFFIC = "com.psiphon3.psiphonlibrary.TunnelManager.UNSAFE_TRAFFIC";
     public static final String INTENT_ACTION_HANDSHAKE = "com.psiphon3.psiphonlibrary.TunnelManager.HANDSHAKE";
     public static final String INTENT_ACTION_SELECTED_REGION_NOT_AVAILABLE = "com.psiphon3.psiphonlibrary.TunnelManager.SELECTED_REGION_NOT_AVAILABLE";
     public static final String INTENT_ACTION_VPN_REVOKED = "com.psiphon3.psiphonlibrary.TunnelManager.INTENT_ACTION_VPN_REVOKED";
@@ -1592,7 +1594,7 @@ public class TunnelManager implements PsiphonTunnel.HostService, MyLog.ILogger, 
                                 .setStyle(new NotificationCompat.BigTextStyle().bigText(notificationMessage))
                                 .setPriority(NotificationCompat.PRIORITY_HIGH)
                                 .setAutoCancel(true)
-                                .setContentIntent(getPendingIntent(m_parentService, INTENT_ACTION_VIEW))
+                                .setContentIntent(getPendingIntent(m_parentService, INTENT_ACTION_UNSAFE_TRAFFIC))
                                 .build();
 
                         if (mNotificationManager != null) {
@@ -1606,6 +1608,9 @@ public class TunnelManager implements PsiphonTunnel.HostService, MyLog.ILogger, 
                 // TODO: log this event?
                 
                 // TODO: don't show this in subscribed/speed boost state
+
+                // TODO: add option to never show again
+
                 m_Handler.post(new Runnable() {
                    @Override
                    public void run() {
@@ -1618,7 +1623,7 @@ public class TunnelManager implements PsiphonTunnel.HostService, MyLog.ILogger, 
                                 .setStyle(new NotificationCompat.BigTextStyle().bigText(notificationMessage))
                                 .setPriority(NotificationCompat.PRIORITY_DEFAULT)
                                 .setAutoCancel(true)
-                                .setContentIntent(getPendingIntent(m_parentService, INTENT_ACTION_VIEW))
+                                .setContentIntent(getPendingIntent(m_parentService, INTENT_ACTION_DISALLOWED_TRAFFIC))
                                 .build();
 
                         if (mNotificationManager != null) {
