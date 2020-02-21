@@ -1591,6 +1591,8 @@ public class TunnelManager implements PsiphonTunnel.HostService, MyLog.ILogger, 
                                 .setContentText(notificationMessage)
                                 .setStyle(new NotificationCompat.BigTextStyle().bigText(notificationMessage))
                                 .setPriority(NotificationCompat.PRIORITY_HIGH)
+                                .setAutoCancel(true)
+                                .setContentIntent(getPendingIntent(m_parentService, INTENT_ACTION_VIEW))
                                 .build();
 
                         if (mNotificationManager != null) {
@@ -1615,6 +1617,7 @@ public class TunnelManager implements PsiphonTunnel.HostService, MyLog.ILogger, 
                                 .setContentText(notificationMessage)
                                 .setStyle(new NotificationCompat.BigTextStyle().bigText(notificationMessage))
                                 .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+                                .setAutoCancel(true)
                                 .setContentIntent(getPendingIntent(m_parentService, INTENT_ACTION_VIEW))
                                 .build();
 
