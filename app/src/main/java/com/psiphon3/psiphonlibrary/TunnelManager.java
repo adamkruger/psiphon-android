@@ -1585,7 +1585,7 @@ public class TunnelManager implements PsiphonTunnel.HostService, MyLog.ILogger, 
                    public void run() {
                         final Context context = getContext();
                         String notificationMessage = String.format(context.getString(R.string.unsafe_traffic_alert_notification_message), subject);
-                        Notification notification = new NotificationCompat.Builder(context)
+                        Notification notification = new NotificationCompat.Builder(context, NOTIFICATION_CHANNEL_ID)
                                 .setSmallIcon(R.drawable.ic_psiphon_alert_notification)
                                 .setContentTitle(context.getString(R.string.unsafe_traffic_alert_notification_title))
                                 .setContentText(notificationMessage)
@@ -1609,7 +1609,7 @@ public class TunnelManager implements PsiphonTunnel.HostService, MyLog.ILogger, 
                    public void run() {
                         final Context context = getContext();
                         String notificationMessage = context.getString(R.string.disallowed_traffic_alert_notification_message);
-                        Notification notification = new NotificationCompat.Builder(context)
+                        Notification notification = new NotificationCompat.Builder(context, NOTIFICATION_CHANNEL_ID)
                                 .setSmallIcon(R.drawable.ic_psiphon_alert_notification)
                                 .setContentTitle(context.getString(R.string.disallowed_traffic_alert_notification_title))
                                 .setContentText(notificationMessage)
