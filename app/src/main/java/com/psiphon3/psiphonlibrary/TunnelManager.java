@@ -1160,8 +1160,6 @@ public class TunnelManager implements PsiphonTunnel.HostService, VpnManager.VpnS
             manager.m_context = localeManager.setNewLocale(manager.m_parentService, languageCode);
         }
         manager.updateNotifications();
-        // Also update upgrade notifications
-        UpgradeManager.UpgradeInstaller.updateNotification(manager.getContext());
     }
 
     private Message composeClientMessage(int what, Bundle data) {
@@ -1278,9 +1276,6 @@ public class TunnelManager implements PsiphonTunnel.HostService, VpnManager.VpnS
         m_isStopping.set(false);
         m_networkConnectionStatePublishRelay.accept(TunnelState.ConnectionData.NetworkConnectionState.CONNECTING);
         m_isRoutingThroughTunnelPublishRelay.accept(Boolean.FALSE);
-
-        // Notify if an upgrade has already been downloaded and is waiting for install
-        UpgradeManager.UpgradeInstaller.notifyUpgrade(getContext(), PsiphonTunnel.getDefaultUpgradeDownloadFilePath(getContext()));
 
         MyLog.i(R.string.starting_tunnel, MyLog.Sensitivity.NOT_SENSITIVE);
 
@@ -1582,18 +1577,6 @@ public class TunnelManager implements PsiphonTunnel.HostService, VpnManager.VpnS
         try {
 
             json.put("ClientVersion", EmbeddedValues.CLIENT_VERSION);
-
-            if (UpgradeChecker.upgradeCheckNeeded(context)) {
-
-                json.put("UpgradeDownloadURLs", new JSONArray(EmbeddedValues.UPGRADE_URLS_JSON));
-
-                json.put("UpgradeDownloadClientVersionHeader", "x-amz-meta-psiphon-client-version");
-
-                json.put("EnableUpgradeDownload", true);
-            }
-
-            json.put("MigrateUpgradeDownloadFilename",
-                    new UpgradeManager.OldDownloadedUpgradeFile(context).getFullPath());
 
             json.put("PropagationChannelId", EmbeddedValues.PROPAGATION_CHANNEL_ID);
 
@@ -2000,16 +1983,6 @@ public class TunnelManager implements PsiphonTunnel.HostService, VpnManager.VpnS
             @Override
             public void run() {
                 m_tunnelState.clientRegion = region;
-            }
-        });
-    }
-
-    @Override
-    public void onClientUpgradeDownloaded(String filename) {
-        m_Handler.post(new Runnable() {
-            @Override
-            public void run() {
-                UpgradeManager.UpgradeInstaller.notifyUpgrade(getContext(), filename);
             }
         });
     }
